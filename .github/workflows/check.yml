@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: "*/5 * * * *"   # every 5 minutes (GitHub may delay runs)
   workflow_dispatch:         # lets you start a run manually to test
+    inputs:
+      test_notify:
+        description: "Only send a test push notification, skip the check"
+        type: boolean
+        default: false
 
 concurrency:
   group: siri-check
@@ -26,6 +31,7 @@ jobs:
           NOT_PUBLIC_TOKEN: ${{ secrets.NOT_PUBLIC_TOKEN }}
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
           CURRENT_APPOINTMENT: "2026-11-02"   # edit if your appointment changes
+          TEST_NOTIFY: ${{ inputs.test_notify && '1' || '' }}
         run: python3 check_once.py
 
       - name: Save state

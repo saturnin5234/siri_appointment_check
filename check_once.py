@@ -114,6 +114,10 @@ def parse_days(data):
 
 
 def main():
+    if os.environ.get("TEST_NOTIFY") == "1":
+        notify("SIRI checker test", "Test notification from GitHub Actions. Notifications work.")
+        return
+
     state = load_state()
     status, text = fetch_days()
     now = datetime.now(TZ).strftime("%Y-%m-%d %H:%M:%S") if TZ else datetime.now().isoformat()
